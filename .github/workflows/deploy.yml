@@ -2,8 +2,6 @@ name: Deploy CDK project
 
 on:
   push:
-    branches:
-     - master
 
 jobs:
   synth:
