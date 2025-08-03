@@ -484,35 +484,6 @@ exports[`Template match snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "processRecordFunctionAllowEventBridgeRuleInvoke933E01D8": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "processRecordFunction32EFC06C",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazon.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:aws:events:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":rule/*",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
     "processRecordFunctionServiceRoleDefaultPolicy227C1F8A": {
       "Properties": {
         "PolicyDocument": {
