@@ -267,7 +267,7 @@ exports[`Template match snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "4a7e4f38dd6e0f86a31e206cd78fac0ce1c8d69e846286da1df89e1c153c1bbb.zip",
+          "S3Key": "8eeb8e41a3be4d97454d789dccc61a6d52fe3ec1e2b07f8cfcca128139031f7f.zip",
         },
         "Environment": {
           "Variables": {
@@ -450,7 +450,7 @@ exports[`Template match snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d5bdf8906f95bd20e1d61a6145cf9f07887b0a8d049d2d560bb78cff909f9899.zip",
+          "S3Key": "47449e525ebe535cfe19f6a657de6cb3a4abac18b7fc2816dafdada8e7fd3e56.zip",
         },
         "Environment": {
           "Variables": {
@@ -483,6 +483,35 @@ exports[`Template match snapshot 1`] = `
         "Timeout": 5,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "processRecordFunctionAllowEventBridgeRuleInvoke933E01D8": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "processRecordFunction32EFC06C",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazon.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:events:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":rule/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "processRecordFunctionServiceRoleDefaultPolicy227C1F8A": {
       "Properties": {

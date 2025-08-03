@@ -1,5 +1,6 @@
 import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
 import { SNSClient,PublishCommand } from "@aws-sdk/client-sns";
+import { send } from "process";
 
 const dynamodb = new DynamoDBClient();
 const snsClient = new SNSClient();
@@ -20,6 +21,7 @@ export const handler = async(event:eventPayload) =>{
     "addedAt": "2025-08-03T07:46:51.708Z"
 }
      */
+    
 
     const { uuid, payload, addedAt } = event;
 
@@ -37,10 +39,13 @@ export const handler = async(event:eventPayload) =>{
     
     const clientResponse = await dynamodb.send(deleteItemCommand);
     
+    const sendAT = new Date(addedAt).getTime();
+    const now = new Date().getTime();
+    const stayTimeMins = (now - sendAT) / 1000;
     //send notif
     const notifPayload = {
         jsonPayload: payload,
-        stayTime:""
+        stayTime:stayTimeMins
     }
       const publishCommand = new PublishCommand({
             TopicArn: topicArn,
