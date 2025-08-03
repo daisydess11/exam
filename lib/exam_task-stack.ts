@@ -76,7 +76,8 @@ export class ExamTaskStack extends cdk.Stack {
     //delete from table lambda 
 
      const deleteRecordFunction = new BaseFunction(this, 'deleteRecordFunction',{
-       TABLE_NAME:invalidRecordsTable.tableName
+       TABLE_NAME: invalidRecordsTable.tableName,
+       TOPIC_ARN: deletedRecordTopic.topicArn
       });
  
 

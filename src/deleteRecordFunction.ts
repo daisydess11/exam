@@ -1,7 +1,10 @@
 import { DynamoDBClient, DeleteItemCommand } from "@aws-sdk/client-dynamodb";
-import { APIGatewayProxyEvent } from "aws-lambda";
+import { SNSClient,PublishCommand } from "@aws-sdk/client-sns";
 
 const dynamodb = new DynamoDBClient();
+const snsClient = new SNSClient();
+ 
+
 interface eventPayload {
     uuid: string;
     payload: string;
@@ -32,7 +35,20 @@ export const handler = async(event:eventPayload) =>{
     console.log(`delete command: ${JSON.stringify(deleteItemCommand)}`);
 
     
-  const clientResponse = await dynamodb.send(deleteItemCommand);
+    const clientResponse = await dynamodb.send(deleteItemCommand);
+    
+    //send notif
+    const notifPayload = {
+        jsonPayload: payload,
+        stayTime:""
+    }
+      const publishCommand = new PublishCommand({
+            TopicArn: topicArn,
+            Message: JSON.stringify(notifPayload)
+            });
+    
+    const rs = await snsClient.send(publishCommand);
+    
 console.log(`Client response: ${JSON.stringify(clientResponse)}`);
     return {
         statusCode:200,

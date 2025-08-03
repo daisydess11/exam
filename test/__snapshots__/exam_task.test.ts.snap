@@ -1,0 +1,612 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Template match snapshot 1`] = `
+{
+  "Outputs": {
+    "ProcessRecordsApiEndpointB0CDEF4A": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "ProcessRecordsApi3AC528CD",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "ProcessRecordsApiDeploymentStageprod477B0C12",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "ProcessRecordsApi3AC528CD": {
+      "Properties": {
+        "Name": "ProcessRecords",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ProcessRecordsApiAccountC9EF6185": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "ProcessRecordsApi3AC528CD",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "ProcessRecordsApiCloudWatchRole905DCA50",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ProcessRecordsApiCloudWatchRole905DCA50": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ProcessRecordsApiDeploymentA35A3E4B52068ad94b32aa67141202afcd53f58d": {
+      "DependsOn": [
+        "ProcessRecordsApiprocessRecordPOST80AA3158",
+        "ProcessRecordsApiprocessRecord2BC9C662",
+      ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
+      "Properties": {
+        "Description": "Automatically created by the RestApi construct",
+        "RestApiId": {
+          "Ref": "ProcessRecordsApi3AC528CD",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ProcessRecordsApiDeploymentStageprod477B0C12": {
+      "DependsOn": [
+        "ProcessRecordsApiAccountC9EF6185",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "ProcessRecordsApiDeploymentA35A3E4B52068ad94b32aa67141202afcd53f58d",
+        },
+        "RestApiId": {
+          "Ref": "ProcessRecordsApi3AC528CD",
+        },
+        "StageName": "prod",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "ProcessRecordsApiprocessRecord2BC9C662": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ProcessRecordsApi3AC528CD",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "processRecord",
+        "RestApiId": {
+          "Ref": "ProcessRecordsApi3AC528CD",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "ProcessRecordsApiprocessRecordPOST80AA3158": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "processRecordFunction32EFC06C",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "ProcessRecordsApiprocessRecord2BC9C662",
+        },
+        "RestApiId": {
+          "Ref": "ProcessRecordsApi3AC528CD",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "ProcessRecordsApiprocessRecordPOSTApiPermissionMyTestStackProcessRecordsApi6E172954POSTprocessRecord3AECD24A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "processRecordFunction32EFC06C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "ProcessRecordsApi3AC528CD",
+              },
+              "/",
+              {
+                "Ref": "ProcessRecordsApiDeploymentStageprod477B0C12",
+              },
+              "/POST/processRecord",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "ProcessRecordsApiprocessRecordPOSTApiPermissionTestMyTestStackProcessRecordsApi6E172954POSTprocessRecord407F3364": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "processRecordFunction32EFC06C",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "ProcessRecordsApi3AC528CD",
+              },
+              "/test-invoke-stage/POST/processRecord",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "deleteRecordFunctionAB8179E5": {
+      "DependsOn": [
+        "deleteRecordFunctionServiceRoleDefaultPolicy24DEEF47",
+        "deleteRecordFunctionServiceRoleEA51C682",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "4a7e4f38dd6e0f86a31e206cd78fac0ce1c8d69e846286da1df89e1c153c1bbb.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "TABLE_NAME": {
+              "Ref": "invalidRecordsC035AFDC",
+            },
+            "TOPIC_ARN": {
+              "Ref": "deletedRecordTopic393C1624",
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "deleteRecordFunctionServiceRoleEA51C682",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Timeout": 5,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "deleteRecordFunctionServiceRoleDefaultPolicy24DEEF47": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:Query",
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:ConditionCheckItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "invalidRecordsC035AFDC",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+            {
+              "Action": [
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "invalidRecordsC035AFDC",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "deleteRecordFunctionServiceRoleDefaultPolicy24DEEF47",
+        "Roles": [
+          {
+            "Ref": "deleteRecordFunctionServiceRoleEA51C682",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "deleteRecordFunctionServiceRoleEA51C682": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "deletedRecordSubscription410F33EC": {
+      "Properties": {
+        "Endpoint": "desislava.koshnicharova@gmail.com",
+        "Protocol": "email",
+        "TopicArn": {
+          "Ref": "deletedRecordTopic393C1624",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "deletedRecordTopic393C1624": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "lecture",
+            "Value": "exam",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "invalidRecordsC035AFDC": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "PK",
+            "AttributeType": "S",
+          },
+          {
+            "AttributeName": "SK",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "PK",
+            "KeyType": "HASH",
+          },
+          {
+            "AttributeName": "SK",
+            "KeyType": "RANGE",
+          },
+        ],
+        "TableName": "invalidRecords",
+        "Tags": [
+          {
+            "Key": "lecture",
+            "Value": "exam",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "processRecordFunction32EFC06C": {
+      "DependsOn": [
+        "processRecordFunctionServiceRoleDefaultPolicy227C1F8A",
+        "processRecordFunctionServiceRoleF5184E58",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "d5bdf8906f95bd20e1d61a6145cf9f07887b0a8d049d2d560bb78cff909f9899.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_ACCOUNT": {
+              "Ref": "AWS::AccountId",
+            },
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "SCHEDULED_FUNC_ARN": {
+              "Fn::GetAtt": [
+                "deleteRecordFunctionAB8179E5",
+                "Arn",
+              ],
+            },
+            "TABLE_NAME": {
+              "Ref": "invalidRecordsC035AFDC",
+            },
+            "TOPIC_ARN": {
+              "Ref": "validRecordTopicDDC92C9C",
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "processRecordFunctionServiceRoleF5184E58",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+        "Timeout": 5,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "processRecordFunctionServiceRoleDefaultPolicy227C1F8A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "invalidRecordsC035AFDC",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Ref": "AWS::NoValue",
+                },
+              ],
+            },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "validRecordTopicDDC92C9C",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "processRecordFunctionServiceRoleDefaultPolicy227C1F8A",
+        "Roles": [
+          {
+            "Ref": "processRecordFunctionServiceRoleF5184E58",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "processRecordFunctionServiceRoleF5184E58": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "validRecordSubscription84DAFF35": {
+      "Properties": {
+        "Endpoint": "desislava.koshnicharova@gmail.com",
+        "Protocol": "email",
+        "TopicArn": {
+          "Ref": "validRecordTopicDDC92C9C",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "validRecordTopicDDC92C9C": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "lecture",
+            "Value": "exam",
+          },
+        ],
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
