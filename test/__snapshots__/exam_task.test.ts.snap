@@ -341,6 +341,13 @@ exports[`Template match snapshot 1`] = `
                 },
               ],
             },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "validRecordTopicDDC92C9C",
+              },
+            },
           ],
           "Version": "2012-10-17",
         },
