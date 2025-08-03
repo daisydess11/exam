@@ -83,6 +83,7 @@ export class ExamTaskStack extends cdk.Stack {
 
     invalidRecordsTable.grantReadData(deleteRecordFunction)
     invalidRecordsTable.grantWriteData(deleteRecordFunction)
+    validRecordTopic.grantPublish(deleteRecordFunction);  
 
      //Lambda functions process record
     const processRecordFunction = new BaseFunction(this, 'processRecordFunction',{

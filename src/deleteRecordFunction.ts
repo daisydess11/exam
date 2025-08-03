@@ -24,12 +24,15 @@ export const handler = async(event:eventPayload) =>{
     
 
     const { uuid, payload, addedAt } = event;
-
+    const uuidRec = uuid.split("#")[1];
     const deleteItemCommand = new DeleteItemCommand({
         TableName: tableName,
         Key: {
             PK: {
-                S:uuid.toString()
+                S:uuid
+            },
+            SK: {
+                S:`Metadata#${uuidRec}`
             }
         }
     })
