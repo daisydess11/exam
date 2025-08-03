@@ -9,9 +9,10 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
 import { Table, AttributeType, BillingMode } from 'aws-cdk-lib/aws-dynamodb';
 import { BaseFunction } from './BaseFunction';
+import { ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
 
-const secondaryIndex = 'timestamp';
+//const secondaryIndex = 'timestamp';
 const emailReceiver = "desislava.koshnicharova@gmail.com"
 
 export class ExamTaskStack extends cdk.Stack {
@@ -70,18 +71,9 @@ export class ExamTaskStack extends cdk.Stack {
     Tags.of(invalidRecordsTable).add('lecture', 'exam');
 
 
-     //Lambda functions process record
-    const processRecordFunction = new BaseFunction(this, 'processRecordFunction',{
-        TABLE_NAME:invalidRecordsTable.tableName,
-        TOPIC_ARN: validRecordTopic.topicArn
-      });
-      
+    
 
-    invalidRecordsTable.grantWriteData(processRecordFunction);
-    validRecordTopic.grantPublish(processRecordFunction);    
-
-
-    //read table lambda 
+    //delete from table lambda 
 
      const deleteRecordFunction = new BaseFunction(this, 'deleteRecordFunction',{
        TABLE_NAME:invalidRecordsTable.tableName
@@ -89,17 +81,37 @@ export class ExamTaskStack extends cdk.Stack {
  
 
     invalidRecordsTable.grantReadData(deleteRecordFunction)
+    invalidRecordsTable.grantWriteData(deleteRecordFunction)
+
+     //Lambda functions process record
+    const processRecordFunction = new BaseFunction(this, 'processRecordFunction',{
+        TABLE_NAME:invalidRecordsTable.tableName,
+        TOPIC_ARN: validRecordTopic.topicArn,
+        AWS_ACCOUNT: this.account,
+        SCHEDULED_FUNC_ARN:deleteRecordFunction.functionArn
+      });
+      
+
+    invalidRecordsTable.grantWriteData(processRecordFunction);
+    validRecordTopic.grantPublish(processRecordFunction);  
+
+    // processRecordFunction.addPermission('AllowEventBridgeRuleInvoke', {
+    //   principal: new ServicePrincipal('events.amazon.com'),
+    //   action: 'lambda:InvokeFunction',
+    //   sourceArn:`arn:aws:events:${this.region}:${this.account}:rule/*`
+    // })
+
 
 
     //api implementation
-    //     const orderApi = new RestApi(this,'OrderApi',{
-    //   restApiName:'Orders'
-    // })
+    const processRecordsApi = new RestApi(this,'ProcessRecordsApi',{
+      restApiName:'ProcessRecords'
+    })
 
-    // const orderResource = orderApi.root.addResource('order');
-    // orderResource.addMethod(HttpMethod.GET, new LambdaIntegration(readFunction, {
-    //   proxy:true
-    // }));
+    const orderResource = processRecordsApi.root.addResource('processRecord');
+    orderResource.addMethod(HttpMethod.POST, new LambdaIntegration(processRecordFunction, {
+      proxy:true
+    }));
   }
   
 }
