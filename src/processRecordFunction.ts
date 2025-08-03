@@ -85,7 +85,7 @@ export const handler = async(event:APIGatewayProxyEvent) =>{
       ScheduleExpression: `at(${utcString})`,
       Target: {
         Arn: `arn:aws:lambda:${process.env.AWS_REGION}:${process.env.AWS_ACCOUNT}:function:${process.env.SCHEDULED_FUNC_ARN}`, 
-        RoleArn: `arn:aws:iam::${process.env.AWS_REGION}:role/LambdaExecutionRole`, 
+        RoleArn: `arn:aws:iam::${process.env.AWS_REGION}:role/lambda-ex`, 
         Input: JSON.stringify(eventDetails)
       },
         FlexibleTimeWindow: { Mode: FlexibleTimeWindowMode.OFF }

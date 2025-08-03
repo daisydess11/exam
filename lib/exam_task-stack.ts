@@ -96,12 +96,11 @@ export class ExamTaskStack extends cdk.Stack {
     invalidRecordsTable.grantWriteData(processRecordFunction);
     validRecordTopic.grantPublish(processRecordFunction);  
 
-    // processRecordFunction.addPermission('AllowEventBridgeRuleInvoke', {
-    //   principal: new ServicePrincipal('events.amazon.com'),
-    //   action: 'lambda:InvokeFunction',
-    //   sourceArn:`arn:aws:events:${this.region}:${this.account}:rule/*`
-    // })
-
+    processRecordFunction.addPermission('AllowEventBridgeRuleInvoke', {
+      principal: new ServicePrincipal('events.amazon.com'),
+      action: 'lambda:InvokeFunction',
+      sourceArn:`arn:aws:events:${this.region}:${this.account}:rule/*`
+    })
 
 
     //api implementation

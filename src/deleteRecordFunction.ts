@@ -27,7 +27,7 @@ export const handler = async(event:eventPayload) =>{
         TableName: tableName,
         Key: {
             PK: {
-                S:uuid
+                S:uuid.toString()
             }
         }
     })
